@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import battvariables
+from demo_test import * #CHANGE WHEN I DEFINE THE FINAL FILE
 
 def set_board(size=(10,10)):
     return np.full(size,"_")
@@ -48,7 +49,7 @@ def place_boat(boat,board):
         board[position]="O"
     return board
 
-def player_shoots(battvariables.opp_hidden_board,battvariables.opp_shots_board,battvariables.opplives): #choose lives from the adversary, not own
+def player_shoots(): #choose lives from the adversary, not own
     
     while True:
         row=int(input("Enter a row between 0 and 9 to shoot."))
@@ -57,22 +58,22 @@ def player_shoots(battvariables.opp_hidden_board,battvariables.opp_shots_board,b
         if row < 0 or row > 9 or column < 0 or column > 9: #check if it is inside the board
             print("Enter a valid position.")
             continue # goes up to ask for new input
-        elif battvariables.opp_shots_board[position]=="~" or battvariables.opp_shots_board[position]=="X": #check if the user already shot that position
+        elif demo_test.opp_shots_board[position]=="~" or demo_test.opp_shots_board[position]=="X": #check if the user already shot that position
             print("You already shot that position... Choose a different one.")
             continue
 
-        if battvariables.opp_hidden_board[position] == "_":
+        if demo_test.opp_hidden_board[position] == "_":
             print("You missed!")
-            battvariables.opp_hidden_board[position] = "~"
-            battvariables.opp_shots_board[position] = "~"
-            print(battvariables.opp_shots_board)
-            return battvariables.opp_shots_board #return gets you out of the function so that the turn finishes
+            demo_test.opp_hidden_board[position] = "~"
+            demo_test.opp_shots_board[position] = "~"
+            print(demo_test.opp_shots_board)
+            return demo_test.opp_shots_board #return gets you out of the function so that the turn finishes
         else:    
             print("It's a hit!")
-            battvariables.opp_shots_board[position] = "X"
-            battvariables.opp_hidden_board[position] = "X"
+            demo_test.opp_shots_board[position] = "X"
+            demo_test.opp_hidden_board[position] = "X"
             lives-=1 # decrease adversary's lives
-            print(battvariables.opp_shots_board) #CHECK IF THAT WORKS
+            print(demo_test.opp_shots_board) #CHECK IF THAT WORKS
             print("Keep playing and choose a new position!")
             #the user keeps shooting till they miss the shot
 
