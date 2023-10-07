@@ -1,7 +1,8 @@
 import numpy as np
 import random
 import battvariables
-from demo_test import * #CHANGE WHEN I DEFINE THE FINAL FILE
+import battobjects
+ #CHANGE WHEN I DEFINE THE FINAL FILE
 
 def set_board(size=(10,10)):
     return np.full(size,"_")
@@ -52,28 +53,40 @@ def place_boat(boat,board):
 def player_shoots(): #choose lives from the adversary, not own
     
     while True:
-        row=int(input("Enter a row between 0 and 9 to shoot."))
-        column=int(input("Enter a column between 0 and 9 to shoot."))
+        try:
+            row=int(input("Enter a row between 0 and 9 to shoot."))
+            if row < 0 or row > 9: #check if it is inside the board
+                print("Enter a valid position.")
+                continue # goes up to ask for new input
+        except ValueError:
+            print("Enter a valid number between 0 and 9.")
+
+        try:
+            column=int(input("Enter a column between 0 and 9 to shoot."))
+            if column < 0 or column > 9: #check if it is inside the board
+                print("Enter a valid position.")
+                continue # goes up to ask for new input
+        except ValueError:
+            print("Enter a valid number between 0 and 9.")
+        
         position=row,column
-        if row < 0 or row > 9 or column < 0 or column > 9: #check if it is inside the board
-            print("Enter a valid position.")
-            continue # goes up to ask for new input
-        elif demo_test.opp_shots_board[position]=="~" or demo_test.opp_shots_board[position]=="X": #check if the user already shot that position
+
+        if battobjects.opp_shots_board[position]=="~" or battobjects.opp_shots_board[position]=="X": #check if the user already shot that position
             print("You already shot that position... Choose a different one.")
             continue
 
-        if demo_test.opp_hidden_board[position] == "_":
+        if battobjects.opp_hidden_board[position] == "_":
             print("You missed!")
-            demo_test.opp_hidden_board[position] = "~"
-            demo_test.opp_shots_board[position] = "~"
-            print(demo_test.opp_shots_board)
-            return demo_test.opp_shots_board #return gets you out of the function so that the turn finishes
+            battobjects.opp_hidden_board[position] = "~"
+            battobjects.opp_shots_board[position] = "~"
+            print(battobjects.opp_shots_board)
+            return battobjects.opp_shots_board #return gets you out of the function so that the turn finishes
         else:    
             print("It's a hit!")
-            demo_test.opp_shots_board[position] = "X"
-            demo_test.opp_hidden_board[position] = "X"
-            lives-=1 # decrease adversary's lives
-            print(demo_test.opp_shots_board) #CHECK IF THAT WORKS
+            battobjects.opp_shots_board[position] = "X"
+            battobjects.opp_hidden_board[position] = "X"
+            battvariables.opplives-=1 # decrease adversary's lives
+            print(battobjects.opp_shots_board) #CHECK IF THAT WORKS
             print("Keep playing and choose a new position!")
             #the user keeps shooting till they miss the shot
 
@@ -85,3 +98,23 @@ def player_shoots(): #choose lives from the adversary, not own
 
 #al acabar, print del tablero del oponente
 #opción de quit o de restart?
+
+def machine_shoots():
+    while True:
+        randrow = random.randint(0, 9)
+        randcolumn = random.randint(0, 9)
+        position=randrow,randcolumn
+
+        if battobjects.my_board[position]=="~" or battobjects.my_board[position]=="X": #check if the machine already shot that position
+            continue
+        if battobjects.my_board[position] == "_":
+            print("The machine missed!")
+            battobjects.my_board[position] = "~"
+            print(battobjects.my_board)
+            return battobjects.my_board #return exits the function so that the turn finishes
+        else:    
+            print("It's a hit!")
+            battobjects.my_board[position] = "X"
+            battvariables.mylives-=1 # decrease player's lives
+            print(battobjects.my_board) #CHECK IF THAT WORKS
+            print("The machine keeps playing!")
