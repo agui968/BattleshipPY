@@ -1,14 +1,24 @@
 import numpy as np
 import random
 class Board:
+    """
+    Class to create a board to play Battleship. It also allows you to create random boats and place them in random positions on the board.
+    """
     def __init__(self, size=(10,10)):
+        """"Initiates the class and establishes the default size of the board."""
         self.size=size
         self.ships=[]
 
     def create_board(self):
+        """
+        Method to create an instance of the Board class. It's an empty 10x10 numpy array.
+        """
         return np.full(self.size,"_")
     
     def randomize_boat(self,boat_length:int,ships:list):
+        """
+        Method that creates a random boat of a given length that will be added to a list of boats.
+        """
         self.boat_length=boat_length
         self.ships=ships
         random_boat = []
@@ -42,7 +52,7 @@ class Board:
                 #once it's passed every condition, we're sure the coordinate can be appended
                 random_boat.append((random_row, random_column))
 
-            if correct_coordinate and len(random_boat) == boat_length:# if the coordinate is valid, update list of positions
+            if correct_coordinate and len(random_boat) == boat_length:# if the coordinate is valid, update list of ships
                 for position in random_boat:
                     self.ships.append(position)
                 break
@@ -50,6 +60,9 @@ class Board:
 
 
     def place_boat(self,boat,board):
+            """
+            Method that places the previously created boat on the board (given the coordinates of the previous method).
+            """
             self.boat=boat
             self.board=board
             for position in self.boat:
