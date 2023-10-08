@@ -6,21 +6,21 @@ def set_board(size=(10,10)):
     return np.full(size,"_")
 
 #SETTING 3 BOARDS
-my_board=set_board()
-opp_hidden_board=set_board() #no print
-opp_shots_board=set_board()
+# my_board=set_board()
+# opp_hidden_board=set_board() #no print
+# opp_shots_board=set_board()
 
-myboats = [] #arg of the funct
+# myboats = [] #arg of the funct
 mylives=20 #same as nr of boat positions  #TRANSFER TO VARIABLES.PY
-oppboats=[]
+# oppboats=[]
 opplives=20
 
 
 def randomize_boat(boat_length:int,boatslist:list):
     random_boat = []
+    rdirection = random.choice(["N", "S", "E", "W"])
     while len(random_boat) < boat_length:
-        rdirection = random.choice(["N", "S", "E", "W"])
-
+        
         random_row = random.randint(0, 9)
         random_column = random.randint(0, 9)
         random_boat = [(random_row, random_column)]
@@ -83,8 +83,7 @@ opp_hidden_board=place_boat(randomize_boat(1,oppboats),opp_hidden_board)
 opp_hidden_board=place_boat(randomize_boat(1,oppboats),opp_hidden_board)
 
 #START OF THE GAME
-def intro_game():
-        
+def start_menu():  
     sleep(0.5)
     print("WELCOME TO BATTLESHIP!")
     sleep(1.0)
@@ -105,24 +104,31 @@ def intro_game():
     sleep(1.5)
     mode=int(input("\nWhat kind of game do you want to play?\n1.Full version\n2.Short demo\n3.Quit\n(Enter a number)"))
     while True:
-        if mode==1:
-            # main-all.py
-            break
-        elif mode==2:
-            #demo_all.py
-            break
-        elif mode==3:
-            quit()
-        else:
-            print("Enter a number from 1 to 3.")
-            continue
-intro_game()
+        try:
+            if mode==1:
+                mylives=20 #same as total number of boats
+                opplives=20
+                playgame()
+                break
+            elif mode==2:
+                mylives=3 #Demo: the first to achieve three hits
+                opplives=3
+                playgame()
+                break
+            elif mode==3:
+                quit()
+        except ValueError:
+                print("Enter a number from 1 to 3.")
+                continue
+        
+start_menu()
 
 #FULL VERSION MODE
-print("PLAYER'S BOARD\n",my_board)
+# print("PLAYER'S BOARD\n",my_board)
 
 def player_shoots():
     global opplives
+    print("PLAYER'S BOARD\n",my_board)
     while  opplives >0:
         sleep(1.0)
         print("Your turn!")

@@ -12,23 +12,23 @@ opp_hidden_board=set_board() #no print
 opp_shots_board=set_board()
 
 myboats = [] #arg of the funct
-mylives=2 #same as nr of boat positions  #TRANSFER TO VARIABLES.PY
+mylives=2 #same as nr of boat positions
 oppboats=[]
 opplives=2
 
 
 def randomize_boat(boat_length:int,boatslist:list):
     random_boat = []
+    rdirection = random.choice(["N", "S", "E", "W"])
     while len(random_boat) < boat_length:
-        rdirection = random.choice(["N", "S", "E", "W"])
-
+        
         random_row = random.randint(0, 9)
         random_column = random.randint(0, 9)
         random_boat = [(random_row, random_column)]
 
-        correct_coordinate = True  #so it keeps going through the loop till the bottom part
+        correct_coordinate = True  #declare the variable so it keeps going through the loop till the bottom part (and the variable exists down there)
 
-        for _ in range(1, boat_length):
+        for _ in range(1, boat_length): #create the boat in the specific direction
             if rdirection == "W":
                 random_column -= 1
             elif rdirection == "E":
@@ -60,20 +60,20 @@ def place_boat(boat,board):
     return board
 
 #PLACING MY BOATS ON MY FINAL BOARD (demo version)
-# my_board=place_boat(randomize_boat(4,myboats),my_board)
+# my_board=place_boat(randomize_boat(4,myboats),my_board) #in case you want to try with one more ship
 my_board=place_boat(randomize_boat(1,myboats),my_board)
 my_board=place_boat(randomize_boat(1,myboats),my_board)
 
 #PLACING THE MACHINE'S BOATS (demo version)
-# opp_hidden_board=place_boat(randomize_boat(4,oppboats),opp_hidden_board)
+# opp_hidden_board=place_boat(randomize_boat(4,oppboats),opp_hidden_board) #in case you want to try with one more ship
 opp_hidden_board=place_boat(randomize_boat(1,oppboats),opp_hidden_board)
 opp_hidden_board=place_boat(randomize_boat(1,oppboats),opp_hidden_board)
 
 #START OF THE GAME
-def intro_game():
+def start_menu():
         
     sleep(0.5)
-    print("WELCOME TO BATTLESHIP!")
+    print("\t\t WELCOME TO BATTLESHIP!")
     sleep(1.0)
     print("\nHow to play:")
     print("\nThe aim of the game is to sink your opponent's ships before they sink yours!")
@@ -92,24 +92,29 @@ def intro_game():
     sleep(1.5)
     mode=int(input("\nWhat kind of game do you want to play?\n1.Full version\n2.Short demo\n3.Quit\n(Enter a number)"))
     while True:
-        if mode==1:
-            # main-all.py
-            break
-        elif mode==2:
-            #demo_all.py
-            break
-        elif mode==3:
-            quit()
-        else:
-            print("Enter a number from 1 to 3.")
-            continue
-intro_game()
+        try:
+            if mode==1:
+                mylives=20 #same as total number of boats
+                opplives=20
+                playgame()
+                break
+            elif mode==2:
+                mylives=3 #Demo: the first to achieve three hits
+                opplives=3
+                playgame()
+                break
+            elif mode==3:
+                quit()
+        except ValueError:
+                print("Enter a number from 1 to 3.")
+                continue
 
 #DEMO MODE
-print("PLAYER'S BOARD\n",my_board)
+# print("PLAYER'S BOARD\n",my_board)
 
 def player_shoots():
     global opplives
+    print("PLAYER'S BOARD\n",my_board)
     while opplives >0:
         sleep(1.0)
         print("Your turn! Opponent's lives:", opplives) #lives just for demo
@@ -169,13 +174,13 @@ def player_shoots():
                 print("Keep playing and choose a new position!")
             elif opplives <1: 
                 sleep(1.5)
-                print("You won!\nMACHINE'S HIDDEN BOARD\n")
+                print("You won!\n")
                 sleep(1.0)
-                print(opp_hidden_board,"\n PLAYER'S BOARD\n",my_board)
+                print("MACHINE'S HIDDEN BOARD\n",opp_hidden_board,"\n PLAYER'S BOARD\n",my_board)
                 sleep(1.0)
                 # choice=input("Do you want to play again? Y/n")        #to play again we would need to reset the board and the boats
                 # if choice.lower()=="y":
-                #     opplives=2
+                #     opplives=3
                 #     continue
                 # else:
                 return opplives, quit()
@@ -218,7 +223,7 @@ def machine_shoots():
                 sleep(1.0)
                 # choice=input("Do you want to play again? Y/n")         #to play again we would need to reset the board and the boats
                 # if choice.lower()=="y":
-                #     mylives=2
+                #     mylives=3
                 #     continue
                 # else:
                 return mylives, quit()
